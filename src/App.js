@@ -20,9 +20,37 @@ class App extends Component {
   callApiPokemon() {
     callApi().then(data => {
       console.log(data.results);
+      //map para sacar la url que me da la api
       const urlPoke = data.results.map(item => {
-        return console.log(item.url);
-      })
+        return item.url;
+      });
+      //for y fetch para que me de la info de la url
+      for (let i = 0; i < urlPoke.length; i++) {
+        fetch(urlPoke[i])
+          .then(response => response.json())
+          .then(dataUrl =>{
+            console.log(dataUrl);
+
+            //arr vacío para meter los tipos con el siguiente for
+            const typePoke = [];
+            for (let i = 0; i < dataUrl.types.length; i++) {
+              typePoke.push(dataUrl.types[i].type["name"]);
+            }
+            //const para meter todos los datos que quiero pintar
+            const Pokemon = {
+              name: dataUrl.name,
+              id: dataUrl.id,
+              img: dataUrl.sprites.front_default,
+              type: typePoke
+            }
+            console.log(Pokemon)
+
+            this.setState({
+              repo: Pokemon
+            })
+
+          })
+      }
     })
   }
 
@@ -36,7 +64,7 @@ class App extends Component {
         </header>
 
         <main>
-          <PokeList />
+          <PokeList listPoke = {this.state.repo}/>
         </main>
 
       </div>
