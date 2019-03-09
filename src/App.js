@@ -44,9 +44,11 @@ class App extends Component {
               type: typePoke
             }
             console.log(Pokemon)
-
+            //push para meter la info en el estado
+            const Pokemons = this.state.repo;
+            Pokemons.push(Pokemon)
             this.setState({
-              repo: Pokemon
+              repo: Pokemons
             })
 
           })

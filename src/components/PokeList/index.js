@@ -5,9 +5,10 @@ class PokeList extends Component {
     
     render() { 
         const { listPoke } = this.props
+        console.log('holi',listPoke);
         return ( 
             <div>
-                {/* <ul>
+                { <ul>
                     {listPoke.map(item => {
                         return (
                             <li key = {item.id}>
@@ -16,7 +17,7 @@ class PokeList extends Component {
                             </li>
                         )
                     })}
-                </ul> */}
+                </ul> }
             </div>
          );
     }
