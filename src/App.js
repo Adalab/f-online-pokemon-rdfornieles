@@ -8,9 +8,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      repo: [],
+      poke: [],
       name: ""
     }
+
+    this.getValue = this.getValue.bind(this);
+    this.filterName = this.filterName.bind(this);
   };
 
   componentDidMount(){
@@ -19,7 +22,7 @@ class App extends Component {
 
   callApiPokemon() {
     callApi().then(data => {
-      console.log(data.results);
+      //console.log(data.results);
       //map para sacar la url que me da la api
       const urlPoke = data.results.map(item => {
         return item.url;
@@ -29,7 +32,7 @@ class App extends Component {
         fetch(urlPoke[i])
           .then(response => response.json())
           .then(dataUrl =>{
-            console.log(dataUrl);
+            //console.log(dataUrl);
 
             //arr vacío para meter los tipos con el siguiente for
             const typePoke = [];
@@ -43,17 +46,31 @@ class App extends Component {
               img: dataUrl.sprites.front_default,
               type: typePoke
             }
-            console.log(Pokemon)
+            //console.log(Pokemon)
             //push para meter la info en el estado
-            const Pokemons = this.state.repo;
+            const Pokemons = this.state.poke;
             Pokemons.push(Pokemon)
             this.setState({
-              repo: Pokemons
+              poke: Pokemons
             })
 
           })
       }
     })
+  }
+
+  getValue(e) {
+    const nameValue = e.currentTarget.value;
+    this.setState({
+      name: nameValue
+    })
+  }
+
+  filterName(){
+      return this.state.poke.filter(item =>{
+      const pokeName = item.name;
+      return pokeName.includes(this.state.name.toLowerCase());
+    });
   }
 
 
@@ -62,11 +79,14 @@ class App extends Component {
       <div className="App">
         <header>
           <h1>Pokemon App</h1>
-          <SearchText />
+          <SearchText
+            getValue={this.getValue}
+            valueName={this.state.name}
+          />
         </header>
 
         <main>
-          <PokeList listPoke = {this.state.repo}/>
+          <PokeList listPoke = {this.filterName()}/>
         </main>
 
       </div>

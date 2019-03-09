@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './PokeList.scss';
+import PropTypes from 'prop-types';
 
 class PokeList extends Component {
     
@@ -9,11 +10,17 @@ class PokeList extends Component {
         return ( 
             <div>
                 { <ul>
-                    {listPoke.map(item => {
+                    {listPoke.map((item, index) => {
                         return (
-                            <li key = {item.id}>
+                            <li key = {index} id = {item.id}>
                             <h2>{item.name}</h2>
+                            <p>ID: {item.id}</p>
                             <img src = {item.img} alt = "Imagen Pokemon"/>
+                            {item.type.map((item, index) => {
+                                return (
+                                    <span key = {index}>{item}</span>
+                                )
+                            })}
                             </li>
                         )
                     })}
@@ -21,6 +28,10 @@ class PokeList extends Component {
             </div>
          );
     }
+}
+
+PokeList.propTypes = {
+    listPoke: PropTypes.array.isRequired
 }
  
 export default PokeList;
