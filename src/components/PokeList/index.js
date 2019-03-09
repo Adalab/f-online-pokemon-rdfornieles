@@ -6,7 +6,7 @@ class PokeList extends Component {
     
     render() { 
         const { listPoke } = this.props
-        console.log('holi',listPoke);
+        //console.log('holi',listPoke);
         return ( 
             <div>
                 { <ul>
