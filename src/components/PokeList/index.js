@@ -14,13 +14,20 @@ class PokeList extends Component {
                         return (
                             <li className = "pokemon" key = {index} id = {item.id}>
                             <h2 className = "poke-name">{item.name}</h2>
+                            <span className = "container-id">
+                                <p className = "poke-id">ID: {item.id}</p>
+                            </span>
                             <img className = "poke-img" src = {item.img} alt = "Imagen Pokemon"/>
-                            <p className = "poke-id">ID: {item.id}</p>
-                            {item.type.map((item, index) => {
+                            <div className = "container-type" >
+                                {item.type.map((item, index) => {
                                 return (
-                                    <span className= "poke-type" key = {index}>{item}</span>
+                                    <p className= "poke-type" key = {index}>
+                                    {item}
+                                    </p>
                                 )
                             })}
+                            </div>
+                           
                             </li>
                         )
                     })}
