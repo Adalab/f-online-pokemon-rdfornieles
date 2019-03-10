@@ -9,16 +9,16 @@ class PokeList extends Component {
         //console.log('holi',listPoke);
         return ( 
             <div>
-                { <ul>
+                { <ul className = "poke-list">
                     {listPoke.map((item, index) => {
                         return (
-                            <li key = {index} id = {item.id}>
-                            <h2>{item.name}</h2>
-                            <p>ID: {item.id}</p>
-                            <img src = {item.img} alt = "Imagen Pokemon"/>
+                            <li className = "pokemon" key = {index} id = {item.id}>
+                            <h2 className = "poke-name">{item.name}</h2>
+                            <img className = "poke-img" src = {item.img} alt = "Imagen Pokemon"/>
+                            <p className = "poke-id">ID: {item.id}</p>
                             {item.type.map((item, index) => {
                                 return (
-                                    <span key = {index}>{item}</span>
+                                    <span className= "poke-type" key = {index}>{item}</span>
                                 )
                             })}
                             </li>

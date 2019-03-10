@@ -3,6 +3,7 @@ import './App.css';
 import { callApi } from './components/Services/PokeApi';
 import PokeList from './components/PokeList';
 import SearchText from './components/SearchText';
+import PokemonLogo from './images/PokemonLogo.png';
 
 class App extends Component {
   constructor(props) {
@@ -78,7 +79,8 @@ class App extends Component {
     return (
       <div className="App">
         <header>
-          <h1>Pokemon App</h1>
+          {/* <h1 className = "title-app">Pokemon App</h1> */}
+          <img className = "title-app" src = {PokemonLogo} alt = "Logo Pokemon"/>
           <SearchText
             getValue={this.getValue}
             valueName={this.state.name}
