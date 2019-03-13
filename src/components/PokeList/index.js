@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 class PokeList extends Component {
     
     render() { 
-        const { listPoke } = this.props
-        //console.log('holi',listPoke);
+        const { listPoke } = this.props;
+    
         return ( 
             <div>
                 { <ul className = "poke-list">

@@ -33,8 +33,6 @@ class App extends Component {
         fetch(urlPoke[i])
           .then(response => response.json())
           .then(dataUrl =>{
-            //console.log(dataUrl);
-
             //arr vacío para meter los tipos con el siguiente for
             const typePoke = [];
             for (let i = 0; i < dataUrl.types.length; i++) {
@@ -47,10 +45,11 @@ class App extends Component {
               img: dataUrl.sprites.front_default,
               type: typePoke
             }
-            //console.log(Pokemon)
+            
             //push para meter la info en el estado
             const Pokemons = this.state.poke;
-            Pokemons.push(Pokemon)
+            Pokemons.push(Pokemon);
+            Pokemons.sort((a,b) => a.id - b.id)
             this.setState({
               poke: Pokemons
             })
@@ -79,7 +78,6 @@ class App extends Component {
     return (
       <div className="App">
         <header>
-          {/* <h1 className = "title-app">Pokemon App</h1> */}
           <img className = "title-app" src = {PokemonLogo} alt = "Logo Pokemon"/>
           <SearchText
             getValue={this.getValue}
