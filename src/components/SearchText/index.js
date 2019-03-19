@@ -6,7 +6,7 @@ class SearchText extends Component {
     const { getValue, valueName } = this.props;
 
     return (
-      <span className="container-input">
+      <span className="input-container">
         <label className="input-title" htmlFor="name">
           Busca por nombre
         </label>

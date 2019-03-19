@@ -4,6 +4,8 @@ import { callApi } from "./Services/PokeApi";
 import PokeList from "./components/PokeList";
 import SearchText from "./components/SearchText";
 import PokemonLogo from "./images/PokemonLogo.png";
+import { Route, Switch } from 'react-router-dom';
+import DetailCard from './components/DetailCard';
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +13,7 @@ class App extends Component {
     this.state = {
       poke: [],
       pokeEvolution: [],
-      name: ""
+      name: "",
     };
 
     this.getValue = this.getValue.bind(this);
@@ -19,7 +21,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.callApiPokemon();
+      this.callApiPokemon();
   }
 
   callApiPokemon() {
@@ -33,42 +35,31 @@ class App extends Component {
       
       Promise.all(newUrlPoke)
         .then(Pokemons => {
-          console.log('ttt',Pokemons)
+          //console.log('ttt',Pokemons)
           this.setState({
             poke: Pokemons
           })
-        });
+
+          const evoPokes = this.state.poke.map(item =>{
+            return fetch (item.species.url)
+            .then(response => response.json())
+          })
+
+          Promise.all(evoPokes)
+          .then(item =>{
+            const newItem = []
+            console.log('vennnga', newItem)
+            item.map(evoFrom =>{
+              return newItem.push(evoFrom.evolves_from_species)
+            })
+            this.setState({
+              pokeEvolution: newItem
+            })
+          })
+
+        });  
     });
-
-    const evoPokes = this.state.poke.map(item =>{
-      return fetch (item.species.url)
-      .then(response => response.json())
-    })
-
-    Promise.all(evoPokes)
-    .then(item =>{
-      console.log('jpder', item)
-      this.setState({
-        pokeEvolution: item
-      })
-    })
-    
   }
-
-  // getEvoPoke(){
-  //    const evoPokes = this.state.poke.map(item =>{
-  //      return fetch (item.species.url)
-  //      .then(response => response.json())
-  //    })
-
-  //    Promise.all(evoPokes)
-  //    .then(item =>{
-  //      console.log('jpder', item)
-  //     //  this.setState({
-  //     //    pokeEvolution: item
-  //     //  })
-  //    })
-  // }
 
   getValue(e) {
     const nameValue = e.currentTarget.value;
@@ -83,23 +74,42 @@ class App extends Component {
       const pokeName = item.name;
       return pokeName.includes(this.state.name.toLowerCase());
     });
+    
   }
 
   render() {
-
-    const { pokeEvolution, poke } = this.state
-    console.log('a ver..', poke)
+    const { pokeEvolution } = this.state
     return (
       <div className="App">
         <header>
           <img className="title-app" src={PokemonLogo} alt="Logo Pokemon" />
-          <SearchText getValue={this.getValue} valueName={this.state.name} />
+          <Switch>
+            <Route exact path="/" render={() =>
+            <SearchText 
+            getValue={this.getValue} 
+            valueName={this.state.name}
+            />}
+            />
+          </Switch>
+          
         </header>
 
         <main>
-          <PokeList 
-          listPoke={this.filterName()}
-          />
+          <Switch>
+            <Route exact path="/" render= {() =>
+            <PokeList 
+            listPoke={this.filterName()}
+            //evoPokes={pokeEvolution}
+            />}
+            />
+            {/* <Route path="/poke/:id" render= {props =>
+            <DetailCard 
+            pokemons={this.state.poke}
+            props={props.match}
+            /> */}
+            
+            }/>
+          </Switch>
         </main>
       </div>
     );

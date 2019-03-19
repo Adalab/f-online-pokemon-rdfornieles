@@ -1,41 +1,23 @@
 import React, { Component } from "react";
 import "./PokeList.scss";
 import PropTypes from "prop-types";
+import { Link } from 'react-router-dom';
+import PokemonCard from '../PokemonCard';
 
 class PokeList extends Component {
-  render() {
-    const { listPoke } = this.props;
 
+  render() {
+    const { listPoke, evoPokes } = this.props;
+    //console.log('evopokesmmm',evoPokes)
     return (
       <div>
         {
           <ul className="poke-list">
             {listPoke.map((item, index) => {
               return (
-                <li className="pokemon" key={index} id={item.id}>
-                  <h2 className="poke-name">{item.name}</h2>
-                  <span className="container-id">
-                    <p className="poke-id">ID: {item.id}</p>
-                  </span>
-                  <img
-                    className="poke-img"
-                    src={item.sprites.front_default}
-                    alt="Imagen Pokemon"
-                  />
-                  <div className="container-type">
-                    {item.types.map((item, index) => {
-                      return (
-                        <p className="poke-type" key={index}>
-                          {item.type.name}
-                        </p>
-                      );
-                    })} 
-                  </div>
-                  
-                  <div>
-                  <p></p> 
-                  </div>
-                </li>
+              <Link className="pokeLink" to={`/listPoke/${item.id}`} key={index}>
+              <PokemonCard pokeItem={item} key={index}/>
+              </Link>
               );
             })}
           </ul>
