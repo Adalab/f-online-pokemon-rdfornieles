@@ -19,17 +19,21 @@ class PokeList extends Component {
                   </span>
                   <img
                     className="poke-img"
-                    src={item.img}
+                    src={item.sprites.front_default}
                     alt="Imagen Pokemon"
                   />
                   <div className="container-type">
-                    {item.type.map((item, index) => {
+                    {item.types.map((item, index) => {
                       return (
                         <p className="poke-type" key={index}>
-                          {item}
+                          {item.type.name}
                         </p>
                       );
-                    })}
+                    })} 
+                  </div>
+                  
+                  <div>
+                  <p></p> 
                   </div>
                 </li>
               );

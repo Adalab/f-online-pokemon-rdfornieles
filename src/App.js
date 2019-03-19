@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { callApi } from "./components/Services/PokeApi";
+import { callApi } from "./Services/PokeApi";
 import PokeList from "./components/PokeList";
 import SearchText from "./components/SearchText";
 import PokemonLogo from "./images/PokemonLogo.png";
@@ -10,6 +10,7 @@ class App extends Component {
     super(props);
     this.state = {
       poke: [],
+      pokeEvolution: [],
       name: ""
     };
 
@@ -23,40 +24,51 @@ class App extends Component {
 
   callApiPokemon() {
     callApi().then(data => {
-      //console.log(data.results);
-      //map para sacar la url que me da la api
-      const urlPoke = data.results.map(item => {
-        return item.url;
+      const urlPoke = data.results;
+      //console.log('mmmm', urlPoke)
+      const newUrlPoke = urlPoke.map(item => {
+        return fetch (item.url)
+        .then(response => response.json())
       });
-      //for y fetch para que me de la info de la url
-      for (let i = 0; i < urlPoke.length; i++) {
-        fetch(urlPoke[i])
-          .then(response => response.json())
-          .then(dataUrl => {
-            //arr vacío para meter los tipos con el siguiente for
-            const typePoke = [];
-            for (let i = 0; i < dataUrl.types.length; i++) {
-              typePoke.push(dataUrl.types[i].type["name"]);
-            }
-            //const para meter todos los datos que quiero pintar
-            const Pokemon = {
-              name: dataUrl.name,
-              id: dataUrl.id,
-              img: dataUrl.sprites.front_default,
-              type: typePoke
-            };
-
-            //push para meter la info en el estado
-            const Pokemons = this.state.poke;
-            Pokemons.push(Pokemon);
-            Pokemons.sort((a, b) => a.id - b.id);
-            this.setState({
-              poke: Pokemons
-            });
-          });
-      }
+      
+      Promise.all(newUrlPoke)
+        .then(Pokemons => {
+          console.log('ttt',Pokemons)
+          this.setState({
+            poke: Pokemons
+          })
+        });
     });
+
+    const evoPokes = this.state.poke.map(item =>{
+      return fetch (item.species.url)
+      .then(response => response.json())
+    })
+
+    Promise.all(evoPokes)
+    .then(item =>{
+      console.log('jpder', item)
+      this.setState({
+        pokeEvolution: item
+      })
+    })
+    
   }
+
+  // getEvoPoke(){
+  //    const evoPokes = this.state.poke.map(item =>{
+  //      return fetch (item.species.url)
+  //      .then(response => response.json())
+  //    })
+
+  //    Promise.all(evoPokes)
+  //    .then(item =>{
+  //      console.log('jpder', item)
+  //     //  this.setState({
+  //     //    pokeEvolution: item
+  //     //  })
+  //    })
+  // }
 
   getValue(e) {
     const nameValue = e.currentTarget.value;
@@ -66,6 +78,7 @@ class App extends Component {
   }
 
   filterName() {
+    //console.log('kkk', this.state.poke)
     return this.state.poke.filter(item => {
       const pokeName = item.name;
       return pokeName.includes(this.state.name.toLowerCase());
@@ -73,6 +86,9 @@ class App extends Component {
   }
 
   render() {
+
+    const { pokeEvolution, poke } = this.state
+    console.log('a ver..', poke)
     return (
       <div className="App">
         <header>
@@ -81,7 +97,9 @@ class App extends Component {
         </header>
 
         <main>
-          <PokeList listPoke={this.filterName()} />
+          <PokeList 
+          listPoke={this.filterName()}
+          />
         </main>
       </div>
     );
